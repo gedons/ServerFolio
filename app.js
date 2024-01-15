@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const config = require('./config/config');
 
 const authRoute = require('./routes/authRoute');
+const categoryRoutes = require('./routes/categoryRoutes');
  
 dotenv.config();
 
@@ -33,6 +34,7 @@ mongoose
   });
 
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/categories', categoryRoutes);
 
 
 
