@@ -11,11 +11,8 @@ router.post('/create', authMiddleware.verifyToken, upload.single('image'), proje
 // Get all products
 router.get('/all', projectController.getAllProjects);
 
-// Get all random products
-router.get('/random', projectController.getRandomProducts);
-
 // Get a single product by ID
-router.get('/:productId', projectController.getProductById);
+router.get('/:projectId', projectController.getProjectById);
 
 // Get products by category
 router.get('/product-category/:categoryId', projectController.getProductsByCategory);

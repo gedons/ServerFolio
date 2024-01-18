@@ -6,7 +6,7 @@ const fetch = require('isomorphic-fetch');
 const fs = require('fs');
 
 const dropbox = new Dropbox({
-   accessToken: 'sl.Bt4lJkaDEkIz9Yl5yoac9PHH_c1o8-wxpSE2-jd31Ljx373DaQWk0ZCB50Q7-lOmkywRCE7zWHbfDgdDjZ-umLIuZSYqUG39A2SI7tG6AORCO-4qQMovBKs8GhLf8ME2dEZdaHX9fHWz4zQ',
+   accessToken: 'sl.Bt6Yrdqr9UuUpTi5dmzQVbYhO6o2cF4rJsHpfa6ilDSnkcjzX1qnwWtDqzFH2ur-lxovrQxuydWvsVxEhd2vlsMbgH9hIPuh4fIeuncWsGDTDaO9ZKy582MQ613tCvyS9iKjNgWiIk_mmKo',
    fetch  
 });
 
@@ -14,10 +14,22 @@ const dropbox = new Dropbox({
 //Create Project
 exports.createProject = async (req, res) => {
    const file = req.file;
-  
+
     if (!file) {
       return res.status(400).send('No file uploaded');
     }
+
+   //Other request body
+    const { title, description, url, categoryId } = req.body;
+
+   // Check if the specified category exists
+   const category = await Category.findById(categoryId);
+   if (!category) {
+     return res.status(404).json({ message: 'Category not found' });
+   }
+
+  
+ 
   
     try {
       const fileBuffer = fs.readFileSync(file.path);
@@ -38,8 +50,6 @@ exports.createProject = async (req, res) => {
       // Extract the link from the shared link
       const imageUrl = sharedLink.result.url;
 
-  //Other request body
-      const { title, description, url, categoryId } = req.body;
 
   //save to database
       const newProject = new Project({
@@ -73,38 +83,17 @@ exports.getAllProjects = async (req, res) => {
     }
 };
 
-// Get all products
-exports.getRandomProducts = async (req, res) => {
-  try {
-    const allProducts = await Product.find().populate('category');
-
-     // Get a random selection of products (let's say 5 random products for this example)
-     const numberOfRandomProducts = 8;
-     const randomProducts = getRandomProducts(allProducts, numberOfRandomProducts);
- 
-
-    res.status(200).json({ randomProducts });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch random products: ', error: error.message });
-  }
-};
-
-// Function to get random products from an array of products
-function getRandomProducts(productsArray, count) {
-  const shuffledProducts = productsArray.sort(() => 0.5 - Math.random());
-  return shuffledProducts.slice(0, count);
-}
 
 // Get a single product by ID
-exports.getProductById = async (req, res) => {
+exports.getProjectById = async (req, res) => {
     try {
-      const product = await Product.findById(req.params.productId).populate('category');
-      if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
+      const project = await Project.findById(req.params.projectId).populate('category');
+      if (!project) {
+        return res.status(404).json({ message: 'project not found' });
       }
-      res.status(200).json({ product });
+      res.status(200).json({ project });
     } catch (error) {
-      res.status(500).json({ message: 'Error getting product', error: error.message });
+      res.status(500).json({ message: 'Error getting project', error: error.message });
     }
 };
 
