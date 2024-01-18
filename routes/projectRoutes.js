@@ -15,16 +15,13 @@ router.get('/all', projectController.getAllProjects);
 router.get('/:projectId', projectController.getProjectById);
 
 // Get products by category
-router.get('/product-category/:categoryId', projectController.getProductsByCategory);
+router.get('/project-category/:categoryId', projectController.getProjectByCategory);
 
 // get related products by category
 router.get('/:productId/related', projectController.getRelatedProductsByCategory);
 
 // Update a product by ID
 router.put('/update/:productId', authMiddleware.verifyToken, projectController.updateProductById);
-
-// Handle image upload for a specific product by ID
-router.post('/:productId/image', projectController.uploadProductImage);
 
 // Delete a product by ID
 router.delete('/delete/:productId', authMiddleware.verifyToken, projectController.deleteProductById);
