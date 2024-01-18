@@ -1,76 +1,75 @@
-const Product = require('../models/Product');
+const Project = require('../models/Project');
 const Category = require('../models/Category');
-
-
 const config = require('../config/config');
+const { Dropbox } = require('dropbox');
+const fetch = require('isomorphic-fetch');
+const fs = require('fs');
 
-const keyFilename = config.googleAppCredentials;
-
-const { Storage } = require('@google-cloud/storage');
-const storage = new Storage({
-  projectId: 'project-molding',
-  keyFilename: keyFilename,
+const dropbox = new Dropbox({
+   accessToken: 'sl.Bt4lJkaDEkIz9Yl5yoac9PHH_c1o8-wxpSE2-jd31Ljx373DaQWk0ZCB50Q7-lOmkywRCE7zWHbfDgdDjZ-umLIuZSYqUG39A2SI7tG6AORCO-4qQMovBKs8GhLf8ME2dEZdaHX9fHWz4zQ',
+   fetch  
 });
-const bucket = storage.bucket('project-molding_bucket');
 
-// Create a new product
-exports.createProduct = async (req, res) => {
-  try {
-    if (!req.user.isAdmin) {
-      return res.status(403).json({ message: 'Permission denied. Only admin users can create products.' });
-    }
 
-    const { title, description, sizes, colors, availability, price, categoryId   } = req.body;
-    const images = req.files;
-
-     // Check if the specified category exists
-     const category = await Category.findById(categoryId);
-     if (!category) {
-       return res.status(404).json({ message: 'Category not found' });
-     }
-
-      // Function to upload images to Google Cloud Storage
-      const uploadPromises = images.map((image) => {
-      const imageFileName = image.originalname;
-      const file = bucket.file(`${imageFileName}`);
-      return file.save(image.buffer, { contentType: image.mimetype });
-    });
-
-      // Await uploading of all images
-      await Promise.all(uploadPromises);
+//Create Project
+exports.createProject = async (req, res) => {
+   const file = req.file;
   
-      // Retrieve image URLs after upload
-      const imageUrls = images.map((image) => {
-        const imageFileName = `${image.originalname}`;
-        return `https://storage.googleapis.com/project-molding_bucket/${imageFileName}`;
-      });
+    if (!file) {
+      return res.status(400).send('No file uploaded');
+    }
   
-    const newProduct = new Product({
-      title,
-      description,
-      images: imageUrls,      
-      sizes,
-      colors,
-      availability,
-      price,
-      category: categoryId, 
-    });
+    try {
+      const fileBuffer = fs.readFileSync(file.path);
+      const path = `/uploads/${file.filename}`;
+  
+      const fileData = await dropbox.filesUpload({
+        path: path,
+        contents: fileBuffer,
+      });
+    
+  
+      // path for creating a shared link
+      const sharedLinkPath = { path: fileData.result.path_display };
+  
+      // Create a shared link for the file
+      const sharedLink = await dropbox.sharingCreateSharedLinkWithSettings(sharedLinkPath);
+  
+      // Extract the link from the shared link
+      const imageUrl = sharedLink.result.url;
 
-    const savedProduct = await newProduct.save();
+  //Other request body
+      const { title, description, url, categoryId } = req.body;
 
-    res.status(201).json({ message: 'Product created successfully', product: savedProduct });
-  } catch (error) {
-    res.status(500).json({ message: 'Product creation failed', error: error.message });
-  }
+  //save to database
+      const newProject = new Project({
+        title,
+        description,
+        imageUrl,
+        url,
+        category: categoryId,
+      });
+  
+      try {
+        await newProject.save();
+        res.status(201).send('Project created successfully');
+      } catch (err) {
+        console.error('Error creating project', err);
+        return res.status(500).send('Error creating project');
+      }
+    } catch (err) {
+      console.error('Error uploading file:', err);
+      return res.status(500).send('Error uploading file');
+    }
 };
 
-// Get all random products
-exports.getAllProducts = async (req, res) => {
+// Get all projects
+exports.getAllProjects = async (req, res) => {
     try {
-      const products = await Product.find().populate('category');
-      res.status(200).json({ products });
+      const projects = await Project.find().populate('category');
+      res.status(200).json({ projects });
     } catch (error) {
-      res.status(500).json({ message: 'Error getting products', error: error.message });
+      res.status(500).json({ message: 'Error getting projects', error: error.message });
     }
 };
 

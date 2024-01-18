@@ -17,15 +17,17 @@
     "url": "https://github.com/gedons/ServerFolio/issues"
   },
   "homepage": "https://github.com/gedons/ServerFolio#readme",
-  "dependencies": {     
+  "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "dropbox": "^10.34.0",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "gridfs-stream": "^1.1.1",
     "helmet": "^6.1.0",
+    "isomorphic-fetch": "^3.0.0",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.29.4",
     "mongodb": "^6.2.0",
