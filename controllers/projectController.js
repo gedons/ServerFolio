@@ -19,7 +19,7 @@ exports.createProject = async (req, res) => {
       return res.status(400).send('No file uploaded');
     }
 
-   //Other request body
+   // request body
     const { title, description, url, categoryId } = req.body;
 
    // Check if the specified category exists
@@ -108,54 +108,51 @@ exports.getProjectByCategory = async (req, res) => {
 };
 
 // get related products by category
-exports.getRelatedProductsByCategory = async (req, res) => {
+exports.getRelatedProjectsByCategory = async (req, res) => {
   try {
-    const productId = req.params.productId;
+    const projectId = req.params.projectId;
 
     
-    const product = await Product.findById(productId);
-    const categoryId = product.category; 
+    const project = await Project.findById(projectId);
+    const categoryId = project.category; 
 
     // Find other products with the same category (excluding the current product)
-    const relatedProducts = await Product.find({
+    const relatedProjects = await Project.find({
       category: categoryId,
-      _id: { $ne: productId },
+      _id: { $ne: projectId },
     }).limit(5);  
     
-    res.status(200).json({ relatedProducts });
+    res.status(200).json({ relatedProjects });
   } catch (error) {
-    res.status(500).json({ message: 'Error getting related products', error: error.message });
+    res.status(500).json({ message: 'Error getting related projects', error: error.message });
   }
 };
 
-// Update a product by ID
-exports.updateProductById = async (req, res) => {
+// Update a project by ID
+exports.updateProjectById = async (req, res) => {
   try {
-    if (!req.user.isAdmin) {
-      return res.status(403).json({ message: 'Permission denied. Only admin users can update products.' });
-    }
-
-    const {  title, description,  sizes, colors, availability, price, categoryId } = req.body;
+    
+     const { title, description, url, categoryId } = req.body;
 
     // Check if the specified category exists
-    const category = await Category.findById(categoryId);
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
+    // const category = await Category.findById(categoryId);
+    // if (!category) {
+    //   return res.status(404).json({ message: 'Category not found' });
+    // }
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.productId,
-      {  title, description, sizes, colors, availability, price, category: categoryId },
+    const updatedProject = await Project.findByIdAndUpdate(
+      req.params.projectId,
+      {  title, description, url, category: categoryId },
       { new: true }
     ).populate('category');
 
-    if (!updatedProduct) {
-      return res.status(404).json({ message: 'Product not found' });
+    if (!updatedProject) {
+      return res.status(404).json({ message: 'Project not found' });
     }
 
-    res.status(200).json({ message: 'Product updated successfully', product: updatedProduct });
+    res.status(200).json({ message: 'Project updated successfully', project: updatedProject });
   } catch (error) {
-    res.status(500).json({ message: 'Product update failed', error: error.message });
+    res.status(500).json({ message: 'Project update failed', error: error.message });
   }
 };
 

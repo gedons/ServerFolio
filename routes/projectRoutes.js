@@ -14,14 +14,14 @@ router.get('/all', projectController.getAllProjects);
 // Get a single product by ID
 router.get('/:projectId', projectController.getProjectById);
 
-// Get products by category
+// Get projects by category
 router.get('/project-category/:categoryId', projectController.getProjectByCategory);
 
-// get related products by category
-router.get('/:productId/related', projectController.getRelatedProductsByCategory);
+// get related projects by category
+router.get('/:projectId/related', projectController.getRelatedProjectsByCategory);
 
 // Update a product by ID
-router.put('/update/:productId', authMiddleware.verifyToken, projectController.updateProductById);
+router.put('/update/:projectId', authMiddleware.verifyToken, projectController.updateProjectById);
 
 // Delete a product by ID
 router.delete('/delete/:productId', authMiddleware.verifyToken, projectController.deleteProductById);
