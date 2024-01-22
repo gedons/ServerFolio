@@ -27,10 +27,8 @@ router.put('/update/:projectId', authMiddleware.verifyToken, projectController.u
 router.delete('/delete/:projectId', authMiddleware.verifyToken, projectController.deleteProjectById);
 
 // Get total number of products
-router.get('/getTotalProducts',  authMiddleware.verifyToken, projectController.getTotalProducts);
+router.get('/total/getTotalProjects', projectController.getTotalProjects);
 
-// Route for searching products
-router.get('/search', projectController.searchProducts);
 
 
 module.exports = router;

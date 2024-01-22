@@ -178,23 +178,11 @@ exports.deleteProjectById = async (req, res) => {
 };
 
 // Get total number of products
-exports.getTotalProducts = async (req, res) => {
+exports.getTotalProjects = async (req, res) => {
   try {
-    const totalProducts = await Product.countDocuments();
-    res.status(200).json({ totalProducts });
+    const totalProjects = await Project.countDocuments();
+    res.status(200).json({ totalProjects });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch total products', error: error.message });
-  }
-};
-
-exports.searchProducts = async (req, res) => {
-  try {
-    const searchQuery = req.query.q || "";
-    // Perform a case-insensitive search for products containing the query in their name
-     const products = await Product.find({ title: {$regex:searchQuery, $options: "i"} }).populate('category');
-
-    res.status(200).json({ products });
-  } catch (error) {
-    res.status(500).json({ message: 'Error searching products', error: error.message });
+    res.status(500).json({ message: 'Failed to fetch total projects', error: error.message });
   }
 }
