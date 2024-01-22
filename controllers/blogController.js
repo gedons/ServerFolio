@@ -88,7 +88,6 @@ exports.getBlogById = async (req, res) => {
     }
 };
 
-
 // Update a project by ID
 exports.updateProjectById = async (req, res) => {
   try {
@@ -138,12 +137,12 @@ exports.deleteProjectById = async (req, res) => {
   }
 };
 
-// Get total number of products
-exports.getTotalProjects = async (req, res) => {
+// Get total number of blogs
+exports.getTotalBlogs = async (req, res) => {
   try {
-    const totalProjects = await Project.countDocuments();
-    res.status(200).json({ totalProjects });
+    const totalBlogs = await Blog.countDocuments();
+    res.status(200).json({ totalBlogs });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch total projects', error: error.message });
+    res.status(500).json({ message: 'Failed to fetch total blogs', error: error.message });
   }
 }

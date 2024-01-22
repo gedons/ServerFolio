@@ -22,7 +22,7 @@ router.put('/update/:blogId', authMiddleware.verifyToken, blogController.updateP
 router.delete('/delete/:blogId', authMiddleware.verifyToken, blogController.deleteProjectById);
 
 // Get total number of blog
-router.get('/total/getTotalBlogs', blogController.getTotalProjects);
+router.get('/total/getTotalBlogs', blogController.getTotalBlogs);
 
 
 
