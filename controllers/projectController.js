@@ -133,12 +133,13 @@ exports.updateProjectById = async (req, res) => {
   try {
     
      const { title, description, url, categoryId } = req.body;
+    console.log(req.body);
 
     // Check if the specified category exists
-    // const category = await Category.findById(categoryId);
-    // if (!category) {
-    //   return res.status(404).json({ message: 'Category not found' });
-    // }
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
 
     const updatedProject = await Project.findByIdAndUpdate(
       req.params.projectId,
