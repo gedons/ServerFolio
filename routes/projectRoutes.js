@@ -24,7 +24,7 @@ router.get('/:projectId/related', projectController.getRelatedProjectsByCategory
 router.put('/update/:projectId', authMiddleware.verifyToken, projectController.updateProjectById);
 
 // Delete a product by ID
-router.delete('/delete/:productId', authMiddleware.verifyToken, projectController.deleteProductById);
+router.delete('/delete/:projectId', authMiddleware.verifyToken, projectController.deleteProjectById);
 
 // Get total number of products
 router.get('/getTotalProducts',  authMiddleware.verifyToken, projectController.getTotalProducts);

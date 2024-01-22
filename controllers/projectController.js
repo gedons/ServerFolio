@@ -157,35 +157,23 @@ exports.updateProjectById = async (req, res) => {
   }
 };
 
-
 // Delete a product by ID
-exports.deleteProductById = async (req, res) => {
+exports.deleteProjectById = async (req, res) => {
   try {
-    if (!req.user.isAdmin) {
-      return res.status(403).json({ message: 'Permission denied. Only admin users can delete products.' });
+    const projectId = req.params.projectId;
+
+    // Check if the project exists
+    const existingProject = await Project.findById(projectId);
+    if (!existingProject) {
+      return res.status(404).json({ message: 'Project not found' });
     }
 
-    const deletedProduct = await Product.findByIdAndDelete(req.params.productId).populate('category');
+    // Delete the project
+    await Project.findByIdAndDelete(projectId);
 
-    if (!deletedProduct) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-
-    // Loop through each image path in the deleted product's images array
-    deletedProduct.images.forEach(async (imagePath) => {
-      // Extract the image filename from the GCS path
-      const filename = imagePath.split('/').pop();
-      
-      // Get the file from Google Cloud Storage
-      const file = bucket.file(filename);
-
-      // Delete the file from the bucket
-      await file.delete();
-    });
-
-    res.status(200).json({ message: 'Product deleted successfully' });
+    res.status(200).json({ message: 'Project deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Product deletion failed', error: error.message });
+    res.status(500).json({ message: 'Project deletion failed', error: error.message });
   }
 };
 
