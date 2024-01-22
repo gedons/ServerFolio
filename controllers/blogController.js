@@ -76,15 +76,15 @@ exports.getAllBlogs = async (req, res) => {
 
 
 // Get a single blog by ID
-exports.getProjectById = async (req, res) => {
+exports.getBlogById = async (req, res) => {
     try {
-      const blog = await Project.findById(req.params.projectId).populate('category');
-      if (!project) {
-        return res.status(404).json({ message: 'project not found' });
+      const blog = await Blog.findById(req.params.blogId);
+      if (!blog) {
+        return res.status(404).json({ message: 'blog not found' });
       }
-      res.status(200).json({ project });
+      res.status(200).json({ blog });
     } catch (error) {
-      res.status(500).json({ message: 'Error getting project', error: error.message });
+      res.status(500).json({ message: 'Error getting blog', error: error.message });
     }
 };
 

@@ -12,17 +12,17 @@ router.post('/create', authMiddleware.verifyToken, upload.single('image'), blogC
 router.get('/all', blogController.getAllBlogs);
 
 // Get a single blog by ID
-router.get('/:projectId', blogController.getProjectById);
+router.get('/:blogId', blogController.getBlogById);
 
 
 // Update a blog by ID
-router.put('/update/:projectId', authMiddleware.verifyToken, blogController.updateProjectById);
+router.put('/update/:blogId', authMiddleware.verifyToken, blogController.updateProjectById);
 
 // Delete a blog by ID
-router.delete('/delete/:projectId', authMiddleware.verifyToken, blogController.deleteProjectById);
+router.delete('/delete/:blogId', authMiddleware.verifyToken, blogController.deleteProjectById);
 
 // Get total number of blog
-router.get('/total/getTotalProjects', blogController.getTotalProjects);
+router.get('/total/getTotalBlogs', blogController.getTotalProjects);
 
 
 
