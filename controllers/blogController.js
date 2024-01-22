@@ -113,20 +113,20 @@ exports.updateBlogById = async (req, res) => {
 // Delete a product by ID
 exports.deleteBlogById = async (req, res) => {
   try {
-    const projectId = req.params.projectId;
+    const blogId = req.params.blogId;
 
     // Check if the project exists
-    const existingProject = await Project.findById(projectId);
-    if (!existingProject) {
-      return res.status(404).json({ message: 'Project not found' });
+    const existingBlog = await Blog.findById(blogId);
+    if (!existingBlog) {
+      return res.status(404).json({ message: 'Blog not found' });
     }
 
-    // Delete the project
-    await Project.findByIdAndDelete(projectId);
+    // Delete the Blog
+    await Blog.findByIdAndDelete(blogId);
 
-    res.status(200).json({ message: 'Project deleted successfully' });
+    res.status(200).json({ message: 'Blog deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Project deletion failed', error: error.message });
+    res.status(500).json({ message: 'Blog deletion failed', error: error.message });
   }
 };
 
