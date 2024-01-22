@@ -89,36 +89,29 @@ exports.getBlogById = async (req, res) => {
 };
 
 // Update a project by ID
-exports.updateProjectById = async (req, res) => {
+exports.updateBlogById = async (req, res) => {
   try {
     
-     const { title, description, url, categoryId } = req.body;
-    console.log(req.body);
+     const { title, url } = req.body;
 
-    // Check if the specified category exists
-    const category = await Category.findById(categoryId);
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
-
-    const updatedProject = await Project.findByIdAndUpdate(
-      req.params.projectId,
-      {  title, description, url, category: categoryId },
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      req.params.blogId,
+      {  title, url },
       { new: true }
-    ).populate('category');
+    );
 
-    if (!updatedProject) {
-      return res.status(404).json({ message: 'Project not found' });
+    if (!updatedBlog) {
+      return res.status(404).json({ message: 'Blog not found' });
     }
 
-    res.status(200).json({ message: 'Project updated successfully', project: updatedProject });
+    res.status(200).json({ message: 'Blog updated successfully', blog: updatedBlog });
   } catch (error) {
-    res.status(500).json({ message: 'Project update failed', error: error.message });
+    res.status(500).json({ message: 'Blog update failed', error: error.message });
   }
 };
 
 // Delete a product by ID
-exports.deleteProjectById = async (req, res) => {
+exports.deleteBlogById = async (req, res) => {
   try {
     const projectId = req.params.projectId;
 

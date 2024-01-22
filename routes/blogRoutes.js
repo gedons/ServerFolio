@@ -16,10 +16,10 @@ router.get('/:blogId', blogController.getBlogById);
 
 
 // Update a blog by ID
-router.put('/update/:blogId', authMiddleware.verifyToken, blogController.updateProjectById);
+router.put('/update/:blogId', authMiddleware.verifyToken, blogController.updateBlogById);
 
 // Delete a blog by ID
-router.delete('/delete/:blogId', authMiddleware.verifyToken, blogController.deleteProjectById);
+router.delete('/delete/:blogId', authMiddleware.verifyToken, blogController.deleteBlogById);
 
 // Get total number of blog
 router.get('/total/getTotalBlogs', blogController.getTotalBlogs);
