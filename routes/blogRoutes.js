@@ -9,7 +9,7 @@ const upload  = require('../middleware/uploadBlog');
 router.post('/create', authMiddleware.verifyToken, upload.single('image'), blogController.createBlog);
 
 // Get all blog
-router.get('/all', blogController.getAllProjects);
+router.get('/all', blogController.getAllBlogs);
 
 // Get a single blog by ID
 router.get('/:projectId', blogController.getProjectById);

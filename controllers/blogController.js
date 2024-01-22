@@ -6,7 +6,7 @@ const fetch = require('isomorphic-fetch');
 const fs = require('fs');
 
 const dropbox = new Dropbox({
-   accessToken: 'sl.BuI-8PfDzARGZ8bTCG3pmX2mfnIDvWxd8l4ijWVI4IeNGSEum_NBFiGHPE0LbhSjNY5nWnGJDaPzrFGhed61UHm40iGwd0DpWVlUm1xweRXKryWzVaAVQkjGuRXzy0JDbKEpdh9m0atISFQ',
+   accessToken: 'sl.BuIU7pViV2WuRN0ZRbfV_05DhS17eT23iRuQqukJK2zcl25KtwjF-0983VkguKvgg1SCWBY7NlZxdcPPoiblo8zBDX4mKagrlk3o2NWIal8yvxIwbKrosd_Vm2D3sGhn4RlJkKSvxR03YH4',
    fetch  
 });
 
@@ -65,20 +65,20 @@ exports.createBlog = async (req, res) => {
 };
 
 // Get all blogs
-exports.getAllProjects = async (req, res) => {
+exports.getAllBlogs = async (req, res) => {
     try {
-      const projects = await Project.find().populate('category');
-      res.status(200).json({ projects });
+      const blogs = await Blog.find();
+      res.status(200).json({ blogs });
     } catch (error) {
-      res.status(500).json({ message: 'Error getting projects', error: error.message });
+      res.status(500).json({ message: 'Error getting blogs', error: error.message });
     }
 };
 
 
-// Get a single project by ID
+// Get a single blog by ID
 exports.getProjectById = async (req, res) => {
     try {
-      const project = await Project.findById(req.params.projectId).populate('category');
+      const blog = await Project.findById(req.params.projectId).populate('category');
       if (!project) {
         return res.status(404).json({ message: 'project not found' });
       }
