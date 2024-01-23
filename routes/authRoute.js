@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/register', authController.register);
 
 // admin Login
-router.post('/login', authController.userLogin);
+router.post('/login', authController.login);
 
 
 

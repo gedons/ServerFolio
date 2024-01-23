@@ -32,33 +32,35 @@ const config = require('../config/config');
   };
 
 
-  // User login
-  exports.userLogin = async (req, res) => {
+  //admin login
+  exports.login = async (req, res) => {
     try {
       const { email, password } = req.body;
-
+  
       // Find the user by email
       const user = await User.findOne({ email });
-
+  
       // Check if the user exists
       if (!user) {
         return res.status(401).json({ message: 'Invalid email or password' });
       }
 
+       // Ensure the user is an admin
+      if (!user.isAdmin) {
+        return res.status(401).json({ message: 'Access denied. You are not an admin.' });
+      }
+
+  
       // Verify the password
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
         return res.status(401).json({ message: 'Invalid email or password' });
       }
-
+  
       // Create a JWT token
-      const UserauthToken = jwt.sign(
-        { userId: user._id, isAdmin: user.isAdmin },
-        config.SESSION_SECRET,
-        { expiresIn: '1h' }
-      );
-
-      res.status(200).json({ user, UserauthToken });
+      const authToken = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, config.SESSION_SECRET, { expiresIn: '1h' });
+  
+      res.status(200).json({ user, authToken });
     } catch (error) {
       res.status(500).json({ message: 'Login failed', error: error.message });
     }
