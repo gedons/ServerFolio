@@ -6,7 +6,7 @@ const fetch = require('isomorphic-fetch');
 const fs = require('fs');
 
 const dropbox = new Dropbox({
-   accessToken: 'sl.BuIU7pViV2WuRN0ZRbfV_05DhS17eT23iRuQqukJK2zcl25KtwjF-0983VkguKvgg1SCWBY7NlZxdcPPoiblo8zBDX4mKagrlk3o2NWIal8yvxIwbKrosd_Vm2D3sGhn4RlJkKSvxR03YH4',
+   accessToken: 'sl.BuMPEsRackHaRUTVom05i1anNGbCe4WUJfJ9bCUcbDcwFCXx746G28aN2bpnC52HFyTw4Jb3UBmE051zGwhmolZT_3sK3cRkJmB0hkDeoIiZFVon878yI0F3o_c6uUZXHi1l6LAaHQnFGmo',
    fetch  
 });
 
@@ -41,7 +41,9 @@ exports.createBlog = async (req, res) => {
       const sharedLink = await dropbox.sharingCreateSharedLinkWithSettings(sharedLinkPath);
   
       // Extract the link from the shared link
-      const imageUrl = sharedLink.result.url;
+      let imageUrl = sharedLink.result.url;
+
+      imageUrl = imageUrl.replace(/dl=0/, 'raw=1');
 
 
   //save to database
