@@ -4,9 +4,11 @@ const config = require('../config/config');
 const { Dropbox } = require('dropbox');
 const fetch = require('isomorphic-fetch');
 const fs = require('fs');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const dropbox = new Dropbox({
-   accessToken: 'sl.BuMPEsRackHaRUTVom05i1anNGbCe4WUJfJ9bCUcbDcwFCXx746G28aN2bpnC52HFyTw4Jb3UBmE051zGwhmolZT_3sK3cRkJmB0hkDeoIiZFVon878yI0F3o_c6uUZXHi1l6LAaHQnFGmo',
+   accessToken: process.env.DROPBOX_ACCESS_TOKEN,
    fetch  
 });
 
@@ -78,7 +80,7 @@ exports.createProject = async (req, res) => {
 // Get all projects
 exports.getAllProjects = async (req, res) => {
     try {
-      const projects = await Project.find().populate('category');
+      const projects = await Project.find().populate('category').sort({createdAt: -1 });
       res.status(200).json({ projects });
     } catch (error) {
       res.status(500).json({ message: 'Error getting projects', error: error.message });
