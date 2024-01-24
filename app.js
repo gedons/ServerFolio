@@ -14,8 +14,8 @@ const blogRoutes = require('./routes/blogRoutes');
 dotenv.config();
 
 const corsOptions = {
-  //origin: 'https://www.daeds.uk', 
-  origin: 'http://localhost:5173', 
+  origin: 'https://folio-gk6i.onrender.com', 
+ // origin: 'http://localhost:5173', 
   credentials: true,
 };
 
