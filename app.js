@@ -14,7 +14,7 @@ const blogRoutes = require('./routes/blogRoutes');
 dotenv.config();
 
 const corsOptions = {
-  origin: 'https://folio-gk6i.onrender.com', 
+  origin: 'https://gedonidev.vercel.app', 
  // origin: 'http://localhost:5173', 
   credentials: true,
 };
