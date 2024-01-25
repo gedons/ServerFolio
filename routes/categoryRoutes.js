@@ -20,4 +20,8 @@ router.put('/update/:categoryId', authMiddleware.verifyToken, categoryController
 // Delete a category by ID
 router.delete('/delete/:categoryId', authMiddleware.verifyToken, categoryController.deleteCategoryById);
 
+// Get total number of category
+router.get('/total/getTotalCategories', categoryController.getTotalCategories);
+
+
 module.exports = router;

@@ -93,3 +93,13 @@ exports.deleteCategoryById = async (req, res) => {
       res.status(500).json({ message: 'Category deletion failed', error: error.message });
     }
 };
+
+// Get total number of categories
+exports.getTotalCategories = async (req, res) => {
+  try {
+    const totalCategories = await Category.countDocuments();
+    res.status(200).json({ totalCategories });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch total categories', error: error.message });
+  }
+}
